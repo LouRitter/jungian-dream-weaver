@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Filter, Sparkles, BookOpen, Calendar, ChevronDown, ChevronRight, Plus, Minus } from "lucide-react";
+import { Filter, Sparkles, BookOpen, Calendar, ChevronDown, ChevronRight, Plus, Minus, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -267,18 +267,18 @@ export default function TagFiltersClient({ tags, selectedTag }: TagFiltersClient
         <div>
           <button
             onClick={() => toggleSection('themes')}
-            className="flex items-center gap-3 w-full text-left mb-4 hover:bg-indigo-900/25 rounded-lg p-3 transition-all duration-200 border border-transparent hover:border-indigo-500/30"
+            className="flex items-center gap-3 w-full text-left mb-4 hover:bg-purple-900/25 rounded-lg p-3 transition-all duration-200 border border-transparent hover:border-purple-500/30"
           >
             {expandedSections.themes ? (
-              <ChevronDown className="h-5 w-5 text-indigo-300" />
+              <ChevronDown className="h-5 w-5 text-purple-300" />
             ) : (
-              <ChevronRight className="h-5 w-5 text-indigo-300" />
+              <ChevronRight className="h-5 w-5 text-purple-300" />
             )}
-            <BookOpen className="h-5 w-5 text-indigo-300" />
-            <h3 className="text-lg font-serif text-indigo-200 font-semibold">
+            <BookOpen className="h-5 w-5 text-purple-300" />
+            <h3 className="text-lg font-serif text-purple-200 font-semibold">
               Themes
             </h3>
-            <Badge variant="outline" className="ml-auto text-indigo-200 border-indigo-400/60 bg-indigo-900/20">
+            <Badge variant="outline" className="ml-auto text-purple-200 border-purple-400/60 bg-purple-900/20">
               {themeTags.length}
             </Badge>
           </button>
@@ -303,18 +303,18 @@ export default function TagFiltersClient({ tags, selectedTag }: TagFiltersClient
         <div>
           <button
             onClick={() => toggleSection('symbols')}
-            className="flex items-center gap-3 w-full text-left mb-4 hover:bg-amber-900/25 rounded-lg p-3 transition-all duration-200 border border-transparent hover:border-amber-500/30"
+            className="flex items-center gap-3 w-full text-left mb-4 hover:bg-purple-900/25 rounded-lg p-3 transition-all duration-200 border border-transparent hover:border-purple-500/30"
           >
             {expandedSections.symbols ? (
-              <ChevronDown className="h-5 w-5 text-amber-300" />
+              <ChevronDown className="h-5 w-5 text-purple-300" />
             ) : (
-              <ChevronRight className="h-5 w-5 text-amber-300" />
+              <ChevronRight className="h-5 w-5 text-purple-300" />
             )}
-            <Calendar className="h-5 w-5 text-amber-300" />
-            <h3 className="text-lg font-serif text-amber-200 font-semibold">
+            <Calendar className="h-5 w-5 text-purple-300" />
+            <h3 className="text-lg font-serif text-purple-200 font-semibold">
               Symbols
             </h3>
-            <Badge variant="outline" className="ml-auto text-amber-200 border-amber-400/60 bg-amber-900/20">
+            <Badge variant="outline" className="ml-auto text-purple-200 border-purple-400/60 bg-purple-900/20">
               {symbolTags.length}
             </Badge>
           </button>
@@ -339,8 +339,12 @@ export default function TagFiltersClient({ tags, selectedTag }: TagFiltersClient
         {selectedTag && (
           <div className="pt-4 border-t border-gray-500/40">
             <Link href="/explore">
-              <Button variant="outline" className="w-full border-gray-400/60 text-gray-200 hover:bg-gray-700/50 hover:border-gray-300/60 font-medium">
-                Clear Filters
+              <Button 
+                variant="outline" 
+                className="w-full border-purple-500/60 text-purple-200 hover:bg-purple-900/30 hover:border-purple-400/80 hover:text-white font-medium transition-all duration-200 bg-purple-950/20"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Clear Filter: {selectedTag}
               </Button>
             </Link>
           </div>

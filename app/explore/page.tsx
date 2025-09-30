@@ -214,6 +214,26 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
           {/* Dreams Grid */}
           <div className="lg:col-span-3">
             <div className="mb-8">
+              {selectedTag ? (
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/40 rounded-lg">
+                    <Filter className="h-5 w-5 text-purple-300" />
+                    <span className="text-purple-200 font-medium">Filtered by:</span>
+                    <Badge variant="outline" className="bg-purple-500/20 border-purple-400/60 text-purple-200">
+                      {selectedTag}
+                    </Badge>
+                  </div>
+                  <Link href="/explore">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="border-purple-500/60 text-purple-200 hover:bg-purple-900/30 hover:border-purple-400/80 hover:text-white"
+                    >
+                      Clear Filter
+                    </Button>
+                  </Link>
+                </div>
+              ) : null}
               <h2 className="text-2xl font-serif text-white mb-2">
                 {selectedTag ? `Dreams tagged "${selectedTag}"` : "Recent Dreams"}
               </h2>

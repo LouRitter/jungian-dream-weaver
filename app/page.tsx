@@ -8,6 +8,7 @@ import Image from "next/image";
 import DreamBackground from "./components/ui/DreamBackground";
 import LoadingMessages from "./components/ui/LoadingMessages";
 import { useAuth } from "./components/providers/AuthProvider";
+import DynamicInsights from "./components/DynamicInsights";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Textarea } from "./components/ui/textarea";
@@ -242,85 +243,14 @@ export default function DreamWeaverLanding() {
               </Card>
             </motion.div>
 
-            {/* Top Right - Recent Insights */}
+            {/* Top Right - Dynamic Insights */}
             <motion.div
               className="lg:col-span-4 space-y-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
-              <Card className="bg-gradient-to-br from-gray-900/40 to-purple-900/20 backdrop-blur-md border-purple-500/30 shadow-xl shadow-purple-950/30">
-                <CardHeader>
-                  <CardTitle className="text-xl font-serif text-purple-300 flex items-center gap-2">
-                    <Sparkles className="h-5 w-5" />
-                    Recent Insights
-                  </CardTitle>
-                  <CardDescription className="text-gray-400 text-sm">
-                    Latest wisdom from the collective unconscious
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg">
-                          <Eye className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
-                            Ocean Dreams
-                          </h4>
-                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                            Dreams of vast oceans often represent the collective unconscious and emotional depths...
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 shadow-lg">
-                          <Star className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
-                            Flying Dreams
-                          </h4>
-                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                            Soaring through skies symbolizes transcendence and liberation from earthly concerns...
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg">
-                          <Moon className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
-                            Shadow Work
-                          </h4>
-                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                            Dreams featuring dark figures often invite us to integrate hidden aspects of ourselves...
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-3 border-t border-gray-600/30">
-                    <Link 
-                      href="/explore" 
-                      className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 hover:from-purple-600/30 hover:to-indigo-600/30 border border-purple-500/30 hover:border-purple-400/50 rounded-lg text-purple-300 hover:text-white transition-all duration-300 text-sm font-medium"
-                    >
-                      <BookOpen className="h-4 w-4" />
-                      Explore All Dreams
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+              <DynamicInsights />
             </motion.div>
 
             {/* Bottom - Explore Archive CTA */}

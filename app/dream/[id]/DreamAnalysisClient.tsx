@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { BookOpen, Lightbulb, Sparkles, Brain, MessageCircle, Wand2 } from "lucide-react";
+import { BookOpen, Lightbulb, Sparkles, Brain, MessageCircle, Wand2, Eye, Palette, AlertCircle } from "lucide-react";
 import DreamBackground from "../../components/ui/DreamBackground";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
@@ -20,58 +21,38 @@ interface DreamArchetype {
 }
 
 interface DreamAnalysis {
+  id: number;
   title: string;
   summary: string;
   interpretation: string;
   identified_symbols: DreamSymbol[];
   identified_archetypes: DreamArchetype[];
+  identified_themes: string[];
   reflection_question: string;
+  image_url?: string;
+  created_at: string;
+  is_private: boolean;
+  user_id: string | null;
+  anonymous_user_id: string | null;
+  dream_text: string;
 }
 
 interface DreamAnalysisClientProps {
-  dreamId?: string;
-  dream?: DreamAnalysis;
+  dream: DreamAnalysis;
+  onVisualizeDream: () => void;
+  isVisualizing: boolean;
+  visualizationError: string | null;
+  canVisualize: boolean;
 }
 
-export default function DreamAnalysisClient({ dreamId, dream }: DreamAnalysisClientProps) {
-  const [analysis, setAnalysis] = useState<DreamAnalysis | null>(dream || null);
-  const [loading, setLoading] = useState(!dream);
+export default function DreamAnalysisClient({ dream, onVisualizeDream, isVisualizing, visualizationError, canVisualize }: DreamAnalysisClientProps) {
+  const [analysis, setAnalysis] = useState<DreamAnalysis | null>(dream);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // If we already have the dream data, no need to fetch
-    if (dream) {
-      setAnalysis(dream);
-      setLoading(false);
-      return;
-    }
-
-    // Only fetch if we don't have dream data and have a dreamId
-    if (!dreamId) {
-      setError('No dream ID provided');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      // Retrieve analysis data from sessionStorage
-      const storedData = sessionStorage.getItem('dream-' + dreamId);
-      
-      if (!storedData) {
-        setError("Dream analysis not found. Please try analyzing a new dream.");
-        setLoading(false);
-        return;
-      }
-
-      const analysisData: DreamAnalysis = JSON.parse(storedData);
-      setAnalysis(analysisData);
-    } catch (err) {
-      setError("Failed to load dream analysis. Please try again.");
-      console.error('Error loading dream analysis:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [dreamId, dream]);
+    setAnalysis(dream);
+  }, [dream]);
 
   if (loading) {
     return (
@@ -147,6 +128,107 @@ export default function DreamAnalysisClient({ dreamId, dream }: DreamAnalysisCli
                 {analysis.summary}
               </CardDescription>
             </CardHeader>
+
+            {/* Dream Visualization Section */}
+            <div className="px-6 md:px-8 pb-6">
+              {analysis.image_url ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="relative overflow-hidden rounded-2xl mb-6"
+                >
+                  <div className="relative w-full h-64 md:h-80 lg:h-96">
+                    <Image
+                      src={analysis.image_url}
+                      alt={`Visualization of ${analysis.title}`}
+                      fill
+                      className="object-cover rounded-2xl"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
+                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
+                      <Palette className="h-4 w-4 text-purple-400" />
+                      <span className="text-sm text-white font-medium">Dream Visualization</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : canVisualize ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center mb-6"
+                >
+                  <div className="bg-gradient-to-r from-purple-900/20 to-indigo-900/20 border border-purple-500/30 rounded-2xl p-6">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="p-3 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 rounded-full">
+                        <Eye className="h-8 w-8 text-purple-400" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-serif text-white mb-2">
+                      Visualize Your Dream
+                    </h3>
+                    <p className="text-gray-300 mb-4 max-w-md mx-auto">
+                      Generate a unique, AI-powered visualization of your dream based on its symbols, archetypes, and themes.
+                    </p>
+                    
+                    {visualizationError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-300 text-sm"
+                      >
+                        <AlertCircle className="h-4 w-4" />
+                        {visualizationError}
+                      </motion.div>
+                    )}
+                    
+                    <Button
+                      onClick={onVisualizeDream}
+                      disabled={isVisualizing}
+                      className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 disabled:cursor-not-allowed"
+                    >
+                      {isVisualizing ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Generating Visualization...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Palette className="h-5 w-5" />
+                          Generate Dream Visualization
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center mb-6"
+                >
+                  <div className="bg-gradient-to-r from-gray-900/20 to-gray-800/20 border border-gray-600/30 rounded-2xl p-6">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="p-3 bg-gradient-to-r from-gray-500/20 to-gray-600/20 rounded-full">
+                        <Eye className="h-8 w-8 text-gray-400" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-serif text-gray-300 mb-2">
+                      Dream Visualization
+                    </h3>
+                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
+                      This dream doesn't have a visualization yet. Only the dream creator can generate visualizations.
+                    </p>
+                    <div className="text-sm text-gray-500">
+                      Create your own dreams to unlock the visualization feature
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
             
             <CardContent className="space-y-8 p-6 md:p-8">
               {/* Interpretation */}
