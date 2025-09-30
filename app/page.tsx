@@ -7,6 +7,7 @@ import { Wand2, Brain, Moon, Star, Sparkles, Eye, Heart, Loader2, BookOpen } fro
 import Image from "next/image";
 import DreamBackground from "./components/ui/DreamBackground";
 import LoadingMessages from "./components/ui/LoadingMessages";
+import { useAuth } from "./components/providers/AuthProvider";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Textarea } from "./components/ui/textarea";
@@ -43,13 +44,10 @@ export default function DreamWeaverLanding() {
   const [dream, setDream] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // Auth context
+  const { user, session, anonymousUserId } = useAuth();
 
-  const dreamTypes = [
-    { name: "Lucid Dreams", icon: Eye, color: "from-purple-500 to-pink-500" },
-    { name: "Nightmares", icon: Moon, color: "from-red-500 to-orange-500" },
-    { name: "Prophetic", icon: Star, color: "from-blue-500 to-cyan-500" },
-    { name: "Healing", icon: Heart, color: "from-green-500 to-emerald-500" }
-  ];
 
   // API call function
   const handleAnalyzeDream = async () => {
@@ -62,12 +60,30 @@ export default function DreamWeaverLanding() {
     setError("");
 
     try {
+      // Prepare request body with user context
+      const requestBody: any = { dream: dream.trim() };
+      
+      if (user && session) {
+        // Add auth header for authenticated users
+        requestBody.userId = user.id;
+      } else if (anonymousUserId) {
+        // Add anonymous user ID for unauthenticated users
+        requestBody.anonymousUserId = anonymousUserId;
+      }
+
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add auth header if user is authenticated
+      if (user && session) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const response = await fetch('/api/analyze-dream', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ dream: dream.trim() }),
+        headers,
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -140,10 +156,10 @@ export default function DreamWeaverLanding() {
                       DREAMS UNVEILED
                     </h1>
                     <p className="text-xl text-gray-300 font-light">
-                      EXPLORE THE DEPTHS OF YOUR SUBCONSCIOUS MIND
+                      AI-POWERED DREAM ANALYSIS WITH CARL JUNG'S WISDOM
                     </p>
                     <div className="text-lg text-purple-300 font-serif">
-                      PSYCHOLOGICAL ANALYSIS
+                      DISCOVER ARCHETYPES • SYMBOLS • HIDDEN MEANINGS
                     </div>
                   </div>
                 </CardHeader>
@@ -202,11 +218,31 @@ export default function DreamWeaverLanding() {
                       <LoadingMessages />
                     </motion.div>
                   )}
+                  
+                  {/* User Status Indicator */}
+                  {!user && !isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                      className="mt-6 text-center"
+                    >
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/20 border border-amber-500/30 rounded-lg">
+                        <Eye className="h-4 w-4 text-amber-400" />
+                        <span className="text-sm text-amber-300">
+                          Dreams saved temporarily • 
+                          <Link href="/library" className="text-amber-200 hover:text-amber-100 underline ml-1">
+                            Claim your library
+                          </Link>
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
 
-            {/* Top Right - Dream Types */}
+            {/* Top Right - Recent Insights */}
             <motion.div
               className="lg:col-span-4 space-y-6"
               initial={{ opacity: 0, y: 20 }}
@@ -215,27 +251,74 @@ export default function DreamWeaverLanding() {
             >
               <Card className="bg-gradient-to-br from-gray-900/40 to-purple-900/20 backdrop-blur-md border-purple-500/30 shadow-xl shadow-purple-950/30">
                 <CardHeader>
-                  <CardTitle className="text-xl font-serif text-purple-300">
-                    DREAM CATEGORIES
+                  <CardTitle className="text-xl font-serif text-purple-300 flex items-center gap-2">
+                    <Sparkles className="h-5 w-5" />
+                    Recent Insights
                   </CardTitle>
+                  <CardDescription className="text-gray-400 text-sm">
+                    Latest wisdom from the collective unconscious
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {dreamTypes.map((type, index) => (
-                    <motion.div
-                      key={type.name}
-                      className="flex items-center space-x-3 p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                    >
-                      <div className={`p-2 rounded-full bg-gradient-to-r ${type.color} shadow-lg`}>
-                        <type.icon className="h-4 w-4 text-white" />
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg">
+                          <Eye className="h-4 w-4 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
+                            Ocean Dreams
+                          </h4>
+                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                            Dreams of vast oceans often represent the collective unconscious and emotional depths...
+                          </p>
+                        </div>
                       </div>
-                      <span className="text-gray-300 group-hover:text-white transition-colors">
-                        {type.name}
-                      </span>
-                    </motion.div>
-                  ))}
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 shadow-lg">
+                          <Star className="h-4 w-4 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
+                            Flying Dreams
+                          </h4>
+                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                            Soaring through skies symbolizes transcendence and liberation from earthly concerns...
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-black/20 hover:bg-purple-900/20 transition-all duration-200 cursor-pointer group">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg">
+                          <Moon className="h-4 w-4 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
+                            Shadow Work
+                          </h4>
+                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                            Dreams featuring dark figures often invite us to integrate hidden aspects of ourselves...
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-3 border-t border-gray-600/30">
+                    <Link 
+                      href="/explore" 
+                      className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 hover:from-purple-600/30 hover:to-indigo-600/30 border border-purple-500/30 hover:border-purple-400/50 rounded-lg text-purple-300 hover:text-white transition-all duration-300 text-sm font-medium"
+                    >
+                      <BookOpen className="h-4 w-4" />
+                      Explore All Dreams
+                    </Link>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>

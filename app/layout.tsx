@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import DreamNavigation from "./components/ui/DreamNavigation";
+import { AuthProvider } from "./components/providers/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +40,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} antialiased`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+          <DreamNavigation />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -20,9 +20,9 @@ interface TagFiltersClientProps {
 
 export default function TagFiltersClient({ tags, selectedTag }: TagFiltersClientProps) {
   const [expandedSections, setExpandedSections] = useState({
-    archetypes: true,
-    themes: true,
-    symbols: true
+    archetypes: false,
+    themes: false,
+    symbols: false
   });
 
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});

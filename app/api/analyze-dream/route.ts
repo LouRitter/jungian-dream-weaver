@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse the request body
     const body = await request.json();
-    const { dream } = body;
+    const { dream, anonymousUserId } = body;
 
     // Validate that dream is provided
     if (!dream || typeof dream !== 'string' || dream.trim().length === 0) {
@@ -38,6 +38,22 @@ export async function POST(request: NextRequest) {
         { error: 'Dream description is required' },
         { status: 400 }
       );
+    }
+
+    // Check for user authentication
+    const authHeader = request.headers.get('authorization');
+    let currentUser = null;
+    
+    if (authHeader) {
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+        if (!error && user) {
+          currentUser = user;
+        }
+      } catch (error) {
+        console.log('No valid auth token provided');
+      }
     }
 
     // Check if API key is configured
@@ -146,20 +162,32 @@ Dream: ${dream}`;
 
     // Save analysis to Supabase database with new tagging system
     try {
+      // Prepare dream data based on user authentication status
+      const dreamData: any = {
+        title: analysis.title,
+        summary: analysis.summary,
+        interpretation: analysis.interpretation,
+        reflection_question: analysis.reflection_question,
+        identified_symbols: analysis.identified_symbols,
+        identified_archetypes: analysis.identified_archetypes,
+        identified_themes: analysis.identified_themes,
+        dream_text: dream.trim(),
+        is_private: false // Default to public, will be configurable later
+      };
+
+      // Add user association based on authentication status
+      if (currentUser) {
+        dreamData.user_id = currentUser.id;
+        console.log('Saving dream for authenticated user:', currentUser.id);
+      } else if (anonymousUserId) {
+        dreamData.anonymous_user_id = anonymousUserId;
+        console.log('Saving dream for anonymous user:', anonymousUserId);
+      }
+
       // First, save the dream
       const { data: savedDream, error: dbError } = await supabaseAdmin
         .from('dreams')
-        .insert({
-          title: analysis.title,
-          summary: analysis.summary,
-          interpretation: analysis.interpretation,
-          reflection_question: analysis.reflection_question,
-          identified_symbols: analysis.identified_symbols,
-          identified_archetypes: analysis.identified_archetypes,
-          identified_themes: analysis.identified_themes,
-          dream_text: dream.trim(),
-          is_private: false // Default to public, will be configurable later
-        })
+        .insert(dreamData)
         .select()
         .single();
 
