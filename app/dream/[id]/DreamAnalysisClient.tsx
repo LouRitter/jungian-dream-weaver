@@ -136,17 +136,18 @@ export default function DreamAnalysisClient({ dream, onVisualizeDream, isVisuali
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="relative overflow-hidden rounded-2xl mb-6"
+                  className="relative overflow-hidden rounded-2xl mb-6 bg-gray-900/20 border border-purple-500/20"
                 >
-                  <div className="relative w-full h-64 md:h-80 lg:h-96">
+                  <div className="relative w-full max-w-2xl mx-auto">
                     <Image
                       src={analysis.image_url}
                       alt={`Visualization of ${analysis.title}`}
-                      fill
-                      className="object-cover rounded-2xl"
+                      width={1024}
+                      height={1024}
+                      className="w-full h-auto rounded-2xl"
                       priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl pointer-events-none" />
                     <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
                       <Palette className="h-4 w-4 text-purple-400" />
                       <span className="text-sm text-white font-medium">Dream Visualization</span>
