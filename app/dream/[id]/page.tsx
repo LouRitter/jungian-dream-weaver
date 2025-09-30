@@ -23,9 +23,9 @@ interface DreamAnalysis {
 }
 
 interface DreamAnalysisPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function DreamAnalysisPage({ params }: DreamAnalysisPageProps) {

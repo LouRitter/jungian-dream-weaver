@@ -43,7 +43,7 @@ interface DreamArchetype {
 }
 
 interface ExplorePageProps {
-  searchParams: { tag?: string };
+  searchParams: Promise<{ tag?: string }>;
 }
 
 // Component for filtering by tags
