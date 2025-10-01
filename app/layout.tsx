@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: 'Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.',
     images: [
       {
-        url: 'https://jungian-dream-weaver.vercel.app/logo.png',
+        url: 'https://jungian-dream-weaver.vercel.app/share-logo.png',
         width: 1200,
         height: 630,
         alt: 'Alchera - AI-Powered Dream Analysis App',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     creator: '@alchera_app',
     title: 'Alchera - AI-Powered Dream Analysis',
     description: 'Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.',
-    images: ['https://jungian-dream-weaver.vercel.app/logo.png'],
+    images: ['https://jungian-dream-weaver.vercel.app/share-logo.png'],
   },
   icons: {
     icon: '/logo.png',
