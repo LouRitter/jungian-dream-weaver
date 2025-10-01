@@ -21,12 +21,56 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Alchera",
-  description: "Enter the dreamscape and explore the depths of your subconscious",
+  title: "Alchera - AI-Powered Dream Analysis",
+  description: "Discover the hidden meanings in your dreams with AI-powered Jungian analysis. Explore archetypes, symbols, and themes from the collective unconscious.",
+  keywords: ["dream analysis", "Jungian psychology", "AI", "archetypes", "dream interpretation", "subconscious", "dream symbols"],
+  authors: [{ name: "Alchera Team" }],
+  creator: "Alchera",
+  publisher: "Alchera",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://jungian-dream-weaver.vercel.app/',
+    siteName: 'Alchera',
+    title: 'Alchera - AI-Powered Dream Analysis',
+    description: 'Discover the hidden meanings in your dreams with AI-powered Jungian analysis. Explore archetypes, symbols, and themes from the collective unconscious.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Alchera - Dream Analysis App',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@alchera_app',
+    creator: '@alchera_app',
+    title: 'Alchera - AI-Powered Dream Analysis',
+    description: 'Discover the hidden meanings in your dreams with AI-powered Jungian analysis. Explore archetypes, symbols, and themes from the collective unconscious.',
+    images: ['/logo.png'],
+  },
   icons: {
     icon: '/logo.png',
     shortcut: '/logo.png',
     apple: '/logo.png',
+  },
+  manifest: '/manifest.json',
+  metadataBase: new URL('https://jungian-dream-weaver.vercel.app/'),
+  alternates: {
+    canonical: '/',
   },
 };
 

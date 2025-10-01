@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /library
+Disallow: /_next/
+Disallow: /dream/*/private
+
+Sitemap: https://alchera.app/sitemap.xml
