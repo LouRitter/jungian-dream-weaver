@@ -18480,3 +18480,18 @@ Your app now has professional-grade social media sharing capabilities that will 
 
 ---
 
+_**User (2025-10-01 01:02Z)**_
+
+import { Analytics } from "@vercel/analytics/next"
+
+
+need to import this for vercels analytics
+
+---
+
+_**Assistant (default)**_
+
+
+
+---
+
