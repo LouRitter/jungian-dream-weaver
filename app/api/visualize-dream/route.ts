@@ -171,27 +171,99 @@ export async function POST(request: NextRequest) {
       return 'a mystical figure with archetypal presence and symbolic elements';
     };
 
-    // Create a more precise, tarot-like prompt that captures the dream's essence
+    // Create a more comprehensive prompt that includes more dream elements
     const createTarotStylePrompt = (dream: any, symbols: string, archetypes: string, themes: string) => {
-      // Extract key visual elements from the dream
-      const keySymbols = dream.identified_symbols?.slice(0, 3).map((s: any) => s.symbol).join(', ') || 'mystical elements';
-      const primaryArchetype = dream.identified_archetypes?.[0]?.archetype || 'The Seeker';
-      const archetypeVisual = getArchetypeVisual(primaryArchetype);
-      const mainThemes = dream.identified_themes?.slice(0, 2).join(' and ') || 'transformation';
+      // Extract comprehensive visual elements from the dream
+      const allSymbols = dream.identified_symbols?.slice(0, 5).map((s: any) => s.symbol) || ['mystical elements'];
+      const allArchetypes = dream.identified_archetypes?.slice(0, 3).map((a: any) => a.archetype) || ['The Seeker'];
+      const allThemes = dream.identified_themes?.slice(0, 3) || ['transformation'];
       
-      return `Create a mystical tarot card-style digital painting with a deep purple, indigo, and violet color palette. Vertical composition with these specific elements:
+      // Create archetypal visual descriptions for each archetype
+      const archetypeVisuals = allArchetypes.map(getArchetypeVisual);
+      const primaryArchetype = allArchetypes[0];
+      const primaryVisual = getArchetypeVisual(primaryArchetype);
+      
+      // Create a rich symbolic landscape
+      const symbolLandscape = allSymbols.map((symbol: string) => {
+        // Map common symbols to visual descriptions
+        const symbolMap: { [key: string]: string } = {
+          'water': 'flowing water or ocean waves',
+          'fire': 'ethereal flames or burning energy',
+          'tree': 'ancient tree with mystical branches',
+          'mountain': 'majestic peak reaching toward the sky',
+          'eye': 'all-seeing mystical eye',
+          'star': 'bright celestial star',
+          'moon': 'luminous moon in various phases',
+          'heart': 'glowing heart symbol',
+          'bird': 'mystical bird in flight',
+          'snake': 'serpent with wisdom symbols',
+          'butterfly': 'transformation butterfly',
+          'key': 'ancient mystical key',
+          'door': 'mysterious portal or gateway',
+          'bridge': 'connecting bridge between realms',
+          'crown': 'royal crown with mystical gems',
+          'sword': 'mystical blade with ancient symbols',
+          'mirror': 'reflective surface showing hidden truths',
+          'ladder': 'ascending steps toward enlightenment',
+          'wheel': 'cosmic wheel of fate',
+          'spiral': 'ethereal spiral patterns'
+        };
+        
+        const normalizedSymbol = symbol.toLowerCase();
+        for (const [key, visual] of Object.entries(symbolMap)) {
+          if (normalizedSymbol.includes(key)) {
+            return visual;
+          }
+        }
+        
+        return `mystical ${symbol} with archetypal significance`;
+      }).join(', ');
+      
+      // Create theme visualizations
+      const themeVisuals = allThemes.map((theme: string) => {
+        const themeMap: { [key: string]: string } = {
+          'transformation': 'metamorphic energy and changing forms',
+          'journey': 'path or road leading into the distance',
+          'healing': 'restorative light and renewal',
+          'conflict': 'dynamic tension and resolution',
+          'love': 'connecting bonds and unity',
+          'power': 'authority and strength symbols',
+          'wisdom': 'knowledge and understanding symbols',
+          'freedom': 'liberation and expansion',
+          'growth': 'blossoming and development',
+          'identity': 'reflection and self-discovery'
+        };
+        
+        const normalizedTheme = theme.toLowerCase();
+        for (const [key, visual] of Object.entries(themeMap)) {
+          if (normalizedTheme.includes(key)) {
+            return visual;
+          }
+        }
+        
+        return `symbolic representation of ${theme}`;
+      }).join(', ');
+      
+      return `Create a mystical tarot card-style digital painting with a deep purple, indigo, and violet color palette. Vertical composition with these comprehensive dream elements:
 
-CENTRAL FIGURE: ${archetypeVisual}
-PRIMARY SYMBOLS: ${keySymbols} arranged around the central figure
-THEMES: ${mainThemes} represented through symbolic elements
+CENTRAL ARCHETYPE: ${primaryVisual} as the main focal point
+SUPPORTING ARCHETYPES: ${archetypeVisuals.slice(1).join(', ')} subtly integrated into the composition
+PRIMARY SYMBOLS: ${symbolLandscape} arranged meaningfully around the central figure
+THEMES: ${themeVisuals} represented through symbolic elements and visual metaphors
 
-STYLE: Ethereal, mystical, and dreamlike with flowing purple gradients, indigo shadows, and silver-gold highlights. The composition should be centered and balanced like a tarot card, with symbolic elements arranged in a meaningful way around the central archetypal figure.
+STYLE: Ethereal, mystical, and dreamlike with flowing purple gradients, indigo shadows, and silver-gold highlights. The composition should be centered and balanced like a tarot card, with all symbolic elements arranged in a meaningful way around the central archetypal figure. Complex and layered. looks human painted or drawn with brush strokes. and looks like a painting. 
 
-LIGHTING: Soft, diffused lighting with ethereal glows emanating from the symbols and archetypal figure. Deep shadows in purple and indigo tones create depth and mystery.
+LIGHTING: Soft, diffused lighting with ethereal glows emanating from the symbols, archetypal figures, and thematic elements. Deep shadows in purple and indigo tones create depth and mystery.
 
 TECHNIQUE: Highly detailed digital art with a painterly quality, rich textures, and mystical atmosphere. The overall feel should be introspective and profound, like a window into the unconscious mind.
 
-CRITICAL: Absolutely no text, words, letters, or written symbols anywhere in the image. Pure visual symbolism only.`;
+COMPOSITION: Include multiple layers of symbolism - foreground archetype, mid-ground symbols, background themes, and atmospheric elements that together tell the complete dream story.
+
+CRITICAL REQUIREMENTS:
+- ABSOLUTELY NO TEXT, WORDS, LETTERS, OR WRITTEN SYMBOLS ANYWHERE IN THE IMAGE
+- NO ALPHABET CHARACTERS, NUMBERS, OR LINGUISTIC ELEMENTS
+- PURE VISUAL SYMBOLISM AND METAPHOR ONLY
+- ALL COMMUNICATION THROUGH IMAGERY, COLOR, AND FORM`;
     };
 
     let imagePrompt = createTarotStylePrompt(dream, safeSymbols, safeArchetypes, safeThemes);
@@ -254,21 +326,70 @@ CRITICAL: Absolutely no text, words, letters, or written symbols anywhere in the
           if (errorMessage.includes('safety system') && attempts < maxAttempts - 1) {
             console.log('Safety system rejection detected, trying with safer thematic prompt...');
             
-            // Create a safer version that still captures the dream's essence
-            const safeSymbolsList = dream.identified_symbols?.map((s: any) => 
-              s.symbol.replace(/[^\w\s]/g, '').toLowerCase()
-            ).filter((s: string) => s.length > 0).join(', ') || 'mystical elements';
+            // Create a safer version that still captures the dream's essence with comprehensive elements
+            const safeSymbols = dream.identified_symbols?.slice(0, 4).map((s: any) => {
+              const symbol = s.symbol.replace(/[^\w\s]/g, '').toLowerCase();
+              // Map to safer visual descriptions
+              const safeMap: { [key: string]: string } = {
+                'water': 'flowing streams',
+                'fire': 'ethereal flames',
+                'tree': 'ancient branches',
+                'mountain': 'majestic peaks',
+                'eye': 'mystical vision',
+                'star': 'celestial light',
+                'moon': 'lunar glow',
+                'heart': 'glowing essence',
+                'bird': 'soaring spirit',
+                'snake': 'wisdom serpent',
+                'butterfly': 'transformation',
+                'key': 'mystical access',
+                'door': 'sacred portal',
+                'bridge': 'connecting path',
+                'crown': 'royal authority',
+                'sword': 'mystical blade',
+                'mirror': 'reflective truth',
+                'ladder': 'ascending steps',
+                'wheel': 'cosmic motion',
+                'spiral': 'ethereal patterns'
+              };
+              
+              for (const [key, visual] of Object.entries(safeMap)) {
+                if (symbol.includes(key)) {
+                  return visual;
+                }
+              }
+              return `mystical ${symbol}`;
+            }).filter((s: string) => s.length > 0) || ['mystical elements'];
             
-            const safeArchetypesList = dream.identified_archetypes?.map((a: any) => 
-              a.archetype.replace(/[^\w\s]/g, '').toLowerCase()
-            ).filter((a: string) => a.length > 0).join(', ') || 'universal patterns';
+            const safeArchetypes = dream.identified_archetypes?.slice(0, 2).map((a: any) => {
+              const archetype = a.archetype.replace(/[^\w\s]/g, '').toLowerCase();
+              const visualMap: { [key: string]: string } = {
+                'hero': 'noble figure with flowing robes',
+                'wise': 'elder with mystical aura',
+                'mother': 'nurturing presence',
+                'shadow': 'mysterious figure',
+                'anima': 'ethereal feminine energy',
+                'animus': 'strong masculine presence',
+                'trickster': 'playful transformative being',
+                'seeker': 'journeying figure with light',
+                'healer': 'restorative energy',
+                'teacher': 'wisdom keeper',
+                'guardian': 'protective presence',
+                'magician': 'transformative power'
+              };
+              
+              for (const [key, visual] of Object.entries(visualMap)) {
+                if (archetype.includes(key)) {
+                  return visual;
+                }
+              }
+              return 'mystical archetypal figure';
+            }).filter((a: string) => a.length > 0) || ['The Seeker'];
             
-            // Create a safer but still tarot-like fallback prompt
-            const primarySymbol = dream.identified_symbols?.[0]?.symbol?.replace(/[^\w\s]/g, '').toLowerCase() || 'mystical symbol';
-            const primaryArchetype = dream.identified_archetypes?.[0]?.archetype || 'The Seeker';
-            const archetypeVisual = getArchetypeVisual(primaryArchetype);
+            const primaryArchetype = safeArchetypes[0];
+            const supportingElements = safeSymbols.slice(1).join(', ');
             
-            finalPrompt = `Create a mystical tarot card-style digital painting with deep purple, indigo, and violet color palette. Vertical composition featuring: ${archetypeVisual} as the central figure with ${primarySymbol} symbol. Ethereal, flowing gradients with silver-gold highlights. Soft, diffused lighting with ethereal glows. Highly detailed digital art with painterly quality and mystical atmosphere. Centered, balanced composition like a tarot card. Absolutely no text, words, or letters anywhere. Pure visual symbolism only.`;
+            finalPrompt = `Create a mystical tarot card-style digital painting with deep purple, indigo, and violet color palette. Vertical composition featuring: ${primaryArchetype} as the central focal point with ${safeSymbols[0]} prominently displayed. Supporting elements include ${supportingElements}. Ethereal, flowing gradients with silver-gold highlights. Soft, diffused lighting with ethereal glows emanating from all elements. Highly detailed digital art with painterly quality and mystical atmosphere. Centered, balanced composition like a tarot card with multiple layers of symbolism. CRITICAL: Absolutely no text, words, letters, numbers, or written symbols anywhere in the image. Pure visual symbolism and metaphor only.`;
             
             attempts++;
             continue; // Try again with the safer prompt
