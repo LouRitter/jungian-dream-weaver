@@ -19165,3 +19165,222 @@ The image should now look much more professional and engaging on LinkedIn! 🚀�
 
 ---
 
+_**User (2025-10-01 05:25Z)**_
+
+i added a new image (share-logo.png) thats the image i want to use
+
+---
+
+_**Assistant (default)**_
+
+Perfect! I'll update the Open Graph meta tags to use your new `share-logo.png` image instead of the custom one I created.
+
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: /Users/lritter/Desktop/jungian-dream-weaver/app/layout.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -49,5 +49,5 @@
+      images: [
+        {
+-         url: 'https://jungian-dream-weaver.vercel.app/og-social-image.png',
++         url: 'https://jungian-dream-weaver.vercel.app/share-logo.png',
+          width: 1200,
+          height: 630,
+```
+
+</details>
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: /Users/lritter/Desktop/jungian-dream-weaver/app/layout.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -63,5 +63,5 @@
+      title: 'Alchera - AI-Powered Dream Analysis',
+      description: 'Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.',
+-     images: ['https://jungian-dream-weaver.vercel.app/og-social-image.png'],
++     images: ['https://jungian-dream-weaver.vercel.app/share-logo.png'],
+    },
+    icons: {
+```
+
+</details>
+
+---
+
+Now let me also update the test HTML file to show your new image:
+
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: /Users/lritter/Desktop/jungian-dream-weaver/public/test-og.html</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -15,5 +15,5 @@
+      <meta property="og:title" content="Alchera - AI-Powered Dream Analysis">
+      <meta property="og:description" content="Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.">
+-     <meta property="og:image" content="https://jungian-dream-weaver.vercel.app/og-social-image.png">
++     <meta property="og:image" content="https://jungian-dream-weaver.vercel.app/share-logo.png">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+```
+
+</details>
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: /Users/lritter/Desktop/jungian-dream-weaver/public/test-og.html</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -33,5 +33,5 @@
+      <meta property="twitter:title" content="Alchera - AI-Powered Dream Analysis">
+      <meta property="twitter:description" content="Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.">
+-     <meta property="twitter:image" content="https://jungian-dream-weaver.vercel.app/og-social-image.png">
++     <meta property="twitter:image" content="https://jungian-dream-weaver.vercel.app/share-logo.png">
+      <meta property="twitter:site" content="@alchera_app">
+      <meta property="twitter:creator" content="@alchera_app">
+```
+
+</details>
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: /Users/lritter/Desktop/jungian-dream-weaver/public/test-og.html</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -78,5 +78,5 @@
+      
+      <div class="preview">
+-         <img src="https://jungian-dream-weaver.vercel.app/og-social-image.png" alt="Alchera Social Media Image">
++         <img src="https://jungian-dream-weaver.vercel.app/share-logo.png" alt="Alchera Share Logo">
+          <h1>Alchera - AI-Powered Dream Analysis</h1>
+          <p>Unlock the secrets of your dreams with AI-powered Jungian psychology. Get personalized interpretations of symbols, archetypes, and themes from your subconscious mind.</p>
+```
+
+</details>
+
+---
+
+Now let me test the build to make sure everything works with your new image:
+
+
+---
+
+Tool use: **run_terminal_cmd**
+
+```bash
+npm run build
+```
+
+```
+
+> nextjs@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.4
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1618ms
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/13) ...
+   Generating static pages (3/13) 
+   Generating static pages (6/13) 
+   Generating static pages (9/13) 
+ ✓ Generating static pages (13/13)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    10.2 kB         213 kB
+├ ○ /_not-found                            138 B         102 kB
+├ ƒ /api/analyze-dream                     138 B         102 kB
+├ ƒ /api/dreams                            138 B         102 kB
+├ ƒ /api/merge-accounts                    138 B         102 kB
+├ ƒ /api/popular-tags                      138 B         102 kB
+├ ƒ /api/visualize-dream                   138 B         102 kB
+├ ○ /auth/callback                       1.79 kB         181 kB
+├ ƒ /dream/[id]                          4.36 kB         207 kB
+├ ƒ /explore                             8.37 kB         159 kB
+└ ○ /library                              8.3 kB         197 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/255-4efeec91c7871d79.js       45.7 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)          1.94 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+```
+
+---
+
+Perfect! ✅ **Updated to Use Your Custom Share Logo!**
+
+## **🔄 What's Been Updated:**
+
+### **📱 Meta Tags Updated**
+- **Open Graph Image**: Now points to `share-logo.png`
+- **Twitter Card Image**: Updated to use your custom image
+- **Test Preview**: Updated to show your new logo
+
+### **🎯 Social Media Sharing**
+Your `share-logo.png` will now be displayed when sharing on:
+- **LinkedIn** - Professional business networking
+- **Twitter/X** - Social media platform
+- **Facebook** - Social networking
+- **Other platforms** that support Open Graph
+
+### **✅ Build Verification**
+- Build successful with no errors
+- All meta tags properly configured
+- Ready for deployment
+
+## **📊 Next Steps:**
+
+1. **Deploy to Vercel** - Your changes will go live
+2. **Test Sharing** - Try sharing your link on LinkedIn to see your custom logo
+3. **Use LinkedIn Post Inspector** - Verify the preview looks perfect
+4. **Share Away!** - Your custom `share-logo.png` will now appear in all social media previews
+
+Your custom share logo is now configured and ready to make your LinkedIn shares look professional and branded! 🚀✨
+
+---
+

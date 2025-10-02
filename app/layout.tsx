@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     images: ['https://jungian-dream-weaver.vercel.app/share-logo.png'],
   },
   icons: {
-    icon: '/logo.png',
+    icon: '/share-logo.png',
     shortcut: '/logo.png',
     apple: '/logo.png',
   },
